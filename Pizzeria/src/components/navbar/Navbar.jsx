@@ -1,6 +1,6 @@
 import React from 'react';
+import "./Navbar.css";
 
-import ".Navbar.css"
 const Navbar = () => {
   const total = 25000;
   const token = false;
