@@ -11,7 +11,11 @@ const CardPizza = ({ name, price, ingredients, img }) => {
         
         <div className="border-top border-bottom py-2 my-2">
           <p className="card-text text-muted small mb-1 text-center">Ingredientes:</p>
-          <p className="text-center small">🍕 {ingredients.join(', ')}</p>
+          <ul className="list-unstyled text-center small">
+            {ingredients.map((ingredient, index) => (
+              <li key={index}>🍕 {ingredient}</li>
+            ))}
+          </ul>
         </div>
         
         <h4 className="text-center my-3">Precio: ${formatPrice(price)}</h4>
@@ -24,3 +28,5 @@ const CardPizza = ({ name, price, ingredients, img }) => {
     </div>
   );
 };
+
+export default CardPizza;
