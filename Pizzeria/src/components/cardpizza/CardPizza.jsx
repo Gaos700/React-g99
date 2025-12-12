@@ -1,6 +1,19 @@
 import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
 
 const CardPizza = ({ name, price, ingredients, img, id }) => {
+  const { addToCart } = useCart();
+  
+  const handleAddToCart = () => {
+    const pizza = {
+      id,
+      name,
+      price,
+      ingredients,
+      img
+    };
+    addToCart(pizza);
+  };
   const formatPrice = (price) => {
     return price.toLocaleString('es-CL');
   };
@@ -15,7 +28,7 @@ const CardPizza = ({ name, price, ingredients, img, id }) => {
           <p className="card-text text-muted small mb-1 text-center">Ingredientes:</p>
           <ul className="list-unstyled text-center small">
             {ingredients.map((ingredient, index) => (
-              <li key={index}>🍕 {ingredient}</li>
+              <li key={index}> {ingredient}</li>
             ))}
           </ul>
         </div>
@@ -24,9 +37,14 @@ const CardPizza = ({ name, price, ingredients, img, id }) => {
         
         <div className="mt-auto d-flex gap-2">
           <Link to={`/pizza/${id || 'p001'}`} className="btn btn-outline-dark flex-fill text-decoration-none">
-            Ver Más 👀
+            Ver Más 
           </Link>
-          <button className="btn btn-dark flex-fill">Añadir 🛍</button>
+          <button 
+            className="btn btn-dark flex-fill"
+            onClick={handleAddToCart}
+          >
+            Añadir 
+          </button>
         </div>
       </div>
     </div>

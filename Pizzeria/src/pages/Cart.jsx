@@ -1,30 +1,10 @@
-import React, { useState } from 'react';
-import {pizzas} from '../data/pizzas';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const Cart = () => {
-  
-  const [cart, setCart] = useState([
-    { ...pizzas[0], count: 2 },  
-    { ...pizzas[1], count: 1 },  
-    { ...pizzas[4], count: 1 },  
-  ]);
-
-
-  const increaseQuantity = (id) => {
-    setCart(cart.map(item => 
-      item.id === id ? { ...item, count: item.count + 1 } : item
-    ));
-  };
-
-
-  const decreaseQuantity = (id) => {
-    setCart(cart.map(item => 
-      item.id === id && item.count > 0 ? { ...item, count: item.count - 1 } : item
-    ).filter(item => item.count > 0));
-  };
-
-
-  const total = cart.reduce((sum, item) => sum + (item.price * item.count), 0);
+  const { cart, increaseQuantity, decreaseQuantity, removeFromCart, getTotal, clearCart } = useCart();
+  const total = getTotal();
 
   const formatPrice = (price) => {
     return price.toLocaleString('es-CL');
@@ -40,7 +20,13 @@ const Cart = () => {
             </div>
             <div className="card-body">
               {cart.length === 0 ? (
-                <p className="text-center text-muted">Tu carrito está vacío</p>
+                <div className="text-center py-5">
+                  <h4 className="text-muted mb-3"> Tu carrito está vacío</h4>
+                  <p className="text-muted mb-4">¡Agrega algunas deliciosas pizzas!</p>
+                  <Link to="/" className="btn btn-primary">
+                     Ver Pizzas
+                  </Link>
+                </div>
               ) : (
                 cart.map((item) => (
                   <div key={item.id} className="d-flex align-items-center border-bottom py-3">
@@ -53,6 +39,12 @@ const Cart = () => {
                     <div className="flex-grow-1">
                       <h5 className="mb-1">Pizza {item.name}</h5>
                       <p className="text-success mb-0 fw-bold">${formatPrice(item.price)}</p>
+                      <button 
+                        className="btn btn-link text-danger p-0 small"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        🗑 Eliminar
+                      </button>
                     </div>
                     <div className="d-flex align-items-center">
                       <button 
@@ -75,11 +67,23 @@ const Cart = () => {
               
               {cart.length > 0 && (
                 <div className="mt-4">
-                  <div className="d-flex justify-content-between align-items-center">
+                  <hr />
+                  <div className="d-flex justify-content-between align-items-center mb-3">
                     <h4 className="mb-0">Total: ${formatPrice(total)}</h4>
-                    <button className="btn btn-success btn-lg">
-                      Pagar 
+                    <button 
+                      className="btn btn-outline-danger"
+                      onClick={clearCart}
+                    >
+                       Vaciar Carrito
                     </button>
+                  </div>
+                  <div className="d-flex gap-2">
+                    <button className="btn btn-success btn-lg flex-fill">
+                       Proceder al Pago
+                    </button>
+                    <Link to="/" className="btn btn-outline-primary btn-lg">
+                       Seguir Comprando
+                    </Link>
                   </div>
                 </div>
               )}

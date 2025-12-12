@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
 import "./Navbar.css";
 
 const Navbar = () => {
-  const total = 25000;
+  const { getTotal, getItemCount } = useCart();
+  const total = getTotal();
+  const itemCount = getItemCount();
   const token = false;
 
   const formatPrice = (price) => {
@@ -18,27 +21,32 @@ const Navbar = () => {
         </Link>
         <div className="d-flex gap-2">
           <Link to="/" className="btn btn-outline-light btn-sm text-decoration-none">
-            🍕 Home
+             Home
           </Link>
           {token ? (
             <>
               <Link to="/profile" className="btn btn-outline-light btn-sm text-decoration-none">
-                🔓 Profile
+                 Profile
               </Link>
-              <button className="btn btn-outline-light btn-sm">🔒 Logout</button>
+              <button className="btn btn-outline-light btn-sm"> Logout</button>
             </>
           ) : (
             <>
               <Link to="/login" className="btn btn-outline-light btn-sm text-decoration-none">
-                🔐 Login
+                 Login
               </Link>
               <Link to="/register" className="btn btn-outline-light btn-sm text-decoration-none">
-                🔐 Register
+                 Register
               </Link>
             </>
           )}
-          <Link to="/cart" className="btn btn-primary btn-sm text-decoration-none">
-            🛒 Total: ${formatPrice(total)}
+          <Link to="/cart" className="btn btn-primary btn-sm text-decoration-none position-relative">
+             Total: ${formatPrice(total)}
+            {itemCount > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {itemCount}
+              </span>
+            )}
           </Link>
         </div>
       </div>

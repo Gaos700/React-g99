@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CartProvider } from './context/CartContext';
 import Navbar from './components/navbar/Navbar';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -10,9 +11,10 @@ import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
+    <CartProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -23,6 +25,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+    </CartProvider>
   );
 }
 
