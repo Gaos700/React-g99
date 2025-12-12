@@ -1,28 +1,39 @@
-import React from 'react';
-import CardPizza from '../cardpizza/CardPizza';
-import {pizzas} from '../../data/pizzas';
+import React, { useState, useEffect } from "react";
+import CardPizza from "../cardpizza/CardPizza";
 
 const Home = () => {
+  const [pizzas, setPizzas] = useState([]);
+
+  useEffect(() => {
+    const getPizzas = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/pizzas");
+        const data = await res.json();
+        setPizzas(data);
+      } catch (error) {
+        console.log("Error cargando pizzas", error);
+      }
+    };
+
+    getPizzas();
+  }, []);
+
   return (
-    <main className="container my-4">
-      <div className="text-center mb-5">
-        <h1 className="display-4 text-white">¡Pizzería Mamma Mia!</h1>
-        <p className="lead text-light">¡Tenemos las mejores pizzas que podrás encontrar!</p>
-      </div>
-      
-      <div className="row g-4">
-        {pizzas.map((pizza) => (
-          <div key={pizza.id} className="col-md-4 col-lg-4">
-            <CardPizza
-              name={pizza.name}
-              price={pizza.price}
-              ingredients={pizza.ingredients}
-              img={pizza.img}
-            />
-          </div>
-        ))}
-      </div>
-    </main>
+    <div className="container d-flex justify-content-center flex-wrap gap-4 mt-4 pb-5">
+      {pizzas.length === 0 ? (
+        <p>Cargando pizzas...</p>
+      ) : (
+        pizzas.map((pizza) => (
+          <CardPizza
+            key={pizza.id}
+            name={pizza.name}
+            price={pizza.price}
+            ingredients={pizza.ingredients}
+            img={pizza.img}
+          />
+        ))
+      )}
+    </div>
   );
 };
 

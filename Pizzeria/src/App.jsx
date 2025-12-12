@@ -4,6 +4,7 @@ import Header from "./components/header/Header";
 import Home from "./components/home/Home";
 import Cart from "./components/cart/Cart";
 import Footer from "./components/footer/Footer";
+import Pizza from "./components/pizza/Pizza"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -14,7 +15,7 @@ function App() {
       <Header />
       <div className="flex-grow-1">
       {/*<Home />*/}
-        <Cart /> 
+        <Pizza /> 
       </div>
       <Footer />
     </div>
