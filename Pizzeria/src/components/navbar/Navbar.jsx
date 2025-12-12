@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -12,23 +13,33 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-dark bg-dark">
       <div className="container-fluid">
-        <span className="navbar-brand mb-0 h1">Pizzería Mamma Mia!</span>
+        <Link to="/" className="navbar-brand mb-0 h1 text-decoration-none">
+          Pizzería Mamma Mia!
+        </Link>
         <div className="d-flex gap-2">
-          <button className="btn btn-outline-light btn-sm">🍕 Home</button>
+          <Link to="/" className="btn btn-outline-light btn-sm text-decoration-none">
+            🍕 Home
+          </Link>
           {token ? (
             <>
-              <button className="btn btn-outline-light btn-sm">🔓 Profile</button>
+              <Link to="/profile" className="btn btn-outline-light btn-sm text-decoration-none">
+                🔓 Profile
+              </Link>
               <button className="btn btn-outline-light btn-sm">🔒 Logout</button>
             </>
           ) : (
             <>
-              <button className="btn btn-outline-light btn-sm">🔐 Login</button>
-              <button className="btn btn-outline-light btn-sm">🔐 Register</button>
+              <Link to="/login" className="btn btn-outline-light btn-sm text-decoration-none">
+                🔐 Login
+              </Link>
+              <Link to="/register" className="btn btn-outline-light btn-sm text-decoration-none">
+                🔐 Register
+              </Link>
             </>
           )}
-          <button className="btn btn-primary btn-sm">
+          <Link to="/cart" className="btn btn-primary btn-sm text-decoration-none">
             🛒 Total: ${formatPrice(total)}
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

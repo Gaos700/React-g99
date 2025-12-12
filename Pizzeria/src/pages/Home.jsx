@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import CardPizza from "../cardpizza/CardPizza";
+import React, { useState, useEffect } from "react";
+import CardPizza from "../components/cardpizza/CardPizza";
+import Header from "../components/header/Header";
 
 const Home = () => {
   const [pizzas, setPizzas] = useState([]);
@@ -19,13 +20,16 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="container d-flex justify-content-center flex-wrap gap-4 mt-4 pb-5">
+    <>
+      <Header />
+      <div className="container d-flex justify-content-center flex-wrap gap-4 mt-4 pb-5">
       {pizzas.length === 0 ? (
         <p>Cargando pizzas...</p>
       ) : (
         pizzas.map((pizza) => (
           <CardPizza
             key={pizza.id}
+            id={pizza.id}
             name={pizza.name}
             price={pizza.price}
             ingredients={pizza.ingredients}
@@ -33,7 +37,8 @@ const Home = () => {
           />
         ))
       )}
-    </div>
+      </div>
+    </>
   );
 };
 

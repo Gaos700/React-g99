@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {pizzas} from '../../data/pizzas';
+import {pizzas} from '../data/pizzas';
 
 const Cart = () => {
   
@@ -78,7 +78,7 @@ const Cart = () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <h4 className="mb-0">Total: ${formatPrice(total)}</h4>
                     <button className="btn btn-success btn-lg">
-                      Pagar 💳
+                      Pagar 
                     </button>
                   </div>
                 </div>

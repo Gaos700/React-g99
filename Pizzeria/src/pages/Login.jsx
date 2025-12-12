@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -84,6 +85,10 @@ return (
                 >
                   Iniciar Sesión
                 </button>
+              </div>
+              
+              <div className="text-center">
+                <p>¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link></p>
               </div>
             </div>
           </div>

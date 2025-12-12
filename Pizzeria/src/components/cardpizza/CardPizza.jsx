@@ -1,4 +1,6 @@
-const CardPizza = ({ name, price, ingredients, img }) => {
+import { Link } from 'react-router-dom';
+
+const CardPizza = ({ name, price, ingredients, img, id }) => {
   const formatPrice = (price) => {
     return price.toLocaleString('es-CL');
   };
@@ -21,8 +23,10 @@ const CardPizza = ({ name, price, ingredients, img }) => {
         <h4 className="text-center my-3">Precio: ${formatPrice(price)}</h4>
         
         <div className="mt-auto d-flex gap-2">
-          <button className="btn btn-outline-dark flex-fill">Ver Más 👀</button>
-          <button className="btn btn-dark flex-fill">Añadir 🛒</button>
+          <Link to={`/pizza/${id || 'p001'}`} className="btn btn-outline-dark flex-fill text-decoration-none">
+            Ver Más 👀
+          </Link>
+          <button className="btn btn-dark flex-fill">Añadir 🛍</button>
         </div>
       </div>
     </div>

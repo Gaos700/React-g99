@@ -8,8 +8,6 @@
   z-index: 1030;
   position: relative;
 }
-
-/* Remover cualquier transparencia que pueda estar siendo aplicada */
 .navbar-dark {
   background-color: #212529 !important;
   opacity: 1 !important;
@@ -49,7 +47,7 @@
   border-color: #0a58ca !important;
 }
 
-/* Asegurar que todos los elementos del navbar sean completamente visibles */
+
 .navbar * {
   opacity: 1 !important;
 }
