@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useUser } from '../../context/UserContext';
 import "./Navbar.css";
 
 const Navbar = () => {
   const { getTotal, getItemCount } = useCart();
+  const { token, logout } = useUser();
   const total = getTotal();
   const itemCount = getItemCount();
-  const token = false;
 
   const formatPrice = (price) => {
     return price.toLocaleString('es-CL');
@@ -28,7 +29,12 @@ const Navbar = () => {
               <Link to="/profile" className="btn btn-outline-light btn-sm text-decoration-none">
                  Profile
               </Link>
-              <button className="btn btn-outline-light btn-sm"> Logout</button>
+              <button 
+                className="btn btn-outline-light btn-sm"
+                onClick={logout}
+              >
+                 Logout
+              </button>
             </>
           ) : (
             <>

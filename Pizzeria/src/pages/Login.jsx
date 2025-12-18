@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const Login = () => {
+    const { login } = useUser();
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -22,12 +25,13 @@ if (password.length < 6){
     setError('La contraseña debe tener al menos 6 caracteres');
     return;
 }
-setSuccess('Inicio de sesión Exitoso')
+
+
+setSuccess('Inicio de sesión exitoso');
+login(); 
 setTimeout(() => {
-    setEmail('');
-    setPassword('');
-    setSuccess('');
-}, 2000);
+    navigate('/'); 
+}, 1500);
 };
 return (
     <div className="container mt-5">

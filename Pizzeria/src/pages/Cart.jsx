@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useUser } from '../context/UserContext';
 
 const Cart = () => {
   const { cart, increaseQuantity, decreaseQuantity, removeFromCart, getTotal, clearCart } = useCart();
+  const { token } = useUser();
   const total = getTotal();
 
   const formatPrice = (price) => {
@@ -78,13 +80,30 @@ const Cart = () => {
                     </button>
                   </div>
                   <div className="d-flex gap-2">
-                    <button className="btn btn-success btn-lg flex-fill">
-                       Proceder al Pago
+                    <button 
+                      className={`btn btn-lg flex-fill ${token ? 'btn-success' : 'btn-secondary'}`}
+                      disabled={!token}
+                      title={!token ? 'Debes iniciar sesión para pagar' : ''}
+                    >
+                       {token ? 'Proceder al Pago' : 'Inicia sesión para pagar'}
                     </button>
                     <Link to="/" className="btn btn-outline-primary btn-lg">
                        Seguir Comprando
                     </Link>
                   </div>
+                  {!token && (
+                    <div className="text-center mt-3">
+                      <p className="text-muted mb-2">
+                        Para realizar tu pedido necesitas iniciar sesión
+                      </p>
+                      <Link to="/login" className="btn btn-primary btn-sm me-2">
+                         Iniciar Sesión
+                      </Link>
+                      <Link to="/register" className="btn btn-outline-primary btn-sm">
+                         Registrarse
+                      </Link>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

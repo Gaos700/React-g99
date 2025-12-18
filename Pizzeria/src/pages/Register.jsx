@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const Register = () => {
+  const { login } = useUser();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -30,12 +33,10 @@ const Register = () => {
     }
 
     setSuccess('Registro exitoso');
+    login(); 
     setTimeout(() => {
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-      setSuccess('');
-    }, 2000);
+      navigate('/'); 
+    }, 1500);
   };
 
   return (
