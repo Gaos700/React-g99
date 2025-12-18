@@ -3,5 +3,15 @@
     "email": "test@test.com",
     "password": "123123",
     "id": "UYz_2Vy9rNw7uELQ7AZ8D"
+  },
+  {
+    "email": "prueba@test.com",
+    "password": "123123",
+    "id": "Zj9gm44HXxV4CFW6K8JRv"
+  },
+  {
+    "email": "gustavo@mosaico.cl",
+    "password": "321123",
+    "id": "1jyRYPib9cmLEZXln0uyp"
   }
 ]

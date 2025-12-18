@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useUser } from '../context/UserContext';
@@ -6,10 +6,64 @@ import { useUser } from '../context/UserContext';
 const Cart = () => {
   const { cart, increaseQuantity, decreaseQuantity, removeFromCart, getTotal, clearCart } = useCart();
   const { token } = useUser();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
   const total = getTotal();
 
   const formatPrice = (price) => {
     return price.toLocaleString('es-CL');
+  };
+
+  const handleCheckout = async () => {
+    if (!token) {
+      setError('Debes iniciar sesión para realizar la compra');
+      return;
+    }
+
+    if (cart.length === 0) {
+      setError('Tu carrito está vacío');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const storedToken = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/checkouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${storedToken}`,
+        },
+        body: JSON.stringify({
+          cart: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            count: item.count,
+            img: item.img
+          }))
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess(true);
+        clearCart();
+        setTimeout(() => {
+          setSuccess(false);
+        }, 5000);
+      } else {
+        setError(data.message || 'Error al procesar la compra');
+      }
+    } catch (error) {
+      setError('Error de conexión. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,7 +99,7 @@ const Cart = () => {
                         className="btn btn-link text-danger p-0 small"
                         onClick={() => removeFromCart(item.id)}
                       >
-                        🗑 Eliminar
+                         Eliminar
                       </button>
                     </div>
                     <div className="d-flex align-items-center">
@@ -67,7 +121,20 @@ const Cart = () => {
                 ))
               )}
               
-              {cart.length > 0 && (
+              {success && (
+                <div className="alert alert-success text-center" role="alert">
+                  <h4>¡Compra realizada con éxito!</h4>
+                  <p>Tu pedido ha sido procesado correctamente.</p>
+                </div>
+              )}
+
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+              
+              {cart.length > 0 && !success && (
                 <div className="mt-4">
                   <hr />
                   <div className="d-flex justify-content-between align-items-center mb-3">
@@ -75,6 +142,7 @@ const Cart = () => {
                     <button 
                       className="btn btn-outline-danger"
                       onClick={clearCart}
+                      disabled={loading}
                     >
                        Vaciar Carrito
                     </button>
@@ -82,10 +150,11 @@ const Cart = () => {
                   <div className="d-flex gap-2">
                     <button 
                       className={`btn btn-lg flex-fill ${token ? 'btn-success' : 'btn-secondary'}`}
-                      disabled={!token}
+                      disabled={!token || loading}
+                      onClick={handleCheckout}
                       title={!token ? 'Debes iniciar sesión para pagar' : ''}
                     >
-                       {token ? 'Proceder al Pago' : 'Inicia sesión para pagar'}
+                      {loading ? 'Procesando...' : ` ${token ? 'Proceder al Pago' : 'Inicia sesión para pagar'}`}
                     </button>
                     <Link to="/" className="btn btn-outline-primary btn-lg">
                        Seguir Comprando

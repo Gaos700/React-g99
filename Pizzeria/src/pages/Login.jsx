@@ -3,35 +3,48 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 const Login = () => {
-    const { login } = useUser();
+    const { loginUser } = useUser();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
 
-
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError('');
     setSuccess('');
+    setLoading(true);
 
 if (!email.trim() || !password.trim()){
     setError('Todos los campos son obligatorios');
+    setLoading(false);
     return;
 }
 if (password.length < 6){
     setError('La contraseña debe tener al menos 6 caracteres');
+    setLoading(false);
     return;
 }
 
-
-setSuccess('Inicio de sesión exitoso');
-login(); 
-setTimeout(() => {
-    navigate('/'); 
-}, 1500);
+try {
+    const result = await loginUser(email, password);
+    
+    if (result.success) {
+        setSuccess(result.message);
+        setTimeout(() => {
+            navigate('/');
+        }, 1500);
+    } else {
+        setError(result.message);
+    }
+} catch (error) {
+    setError('Error inesperado');
+} finally {
+    setLoading(false);
+}
 };
 return (
     <div className="container mt-5">
@@ -83,11 +96,12 @@ return (
                 )}
 
                 <button 
-                  type="button" 
+                  type="submit" 
                   className="btn btn-primary w-100"
                   onClick={handleSubmit}
+                  disabled={loading}
                 >
-                  Iniciar Sesión
+                  {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                 </button>
               </div>
               

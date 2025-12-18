@@ -3,40 +3,56 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 const Register = () => {
-  const { login } = useUser();
+  const { registerUser } = useUser();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError('');
     setSuccess('');
+    setLoading(true);
 
     if (!email.trim() || !password.trim() || !confirmPassword.trim()) {
       setError('Todos los campos son obligatorios');
+      setLoading(false);
       return;
     }
 
     if (password.length < 6) {
       setError('La contraseña debe tener al menos 6 caracteres');
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden');
+      setLoading(false);
       return;
     }
 
-    setSuccess('Registro exitoso');
-    login(); 
-    setTimeout(() => {
-      navigate('/'); 
-    }, 1500);
+    try {
+      const result = await registerUser(email, password);
+      
+      if (result.success) {
+        setSuccess(result.message);
+        setTimeout(() => {
+          navigate('/');
+        }, 1500);
+      } else {
+        setError(result.message);
+      }
+    } catch (error) {
+      setError('Error inesperado');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -88,8 +104,15 @@ const Register = () => {
                   />
                 </div>
                 
-                <button type="submit" className="btn btn-primary w-100 mb-3">
-                  Registrarse
+                {error && <div className="alert alert-danger">{error}</div>}
+                {success && <div className="alert alert-success">{success}</div>}
+                
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-100 mb-3"
+                  disabled={loading}
+                >
+                  {loading ? 'Registrando...' : 'Registrarse'}
                 </button>
               </form>
               
